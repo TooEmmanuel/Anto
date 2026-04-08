@@ -1,0 +1,9 @@
+streamlit>=1.44
+pandas>=2.2
+openpyxl>=3.1
+xlsxwriter>=3.2
+matplotlib>=3.8
+geopandas>=1.0
+fiona>=1.9
+pyproj>=3.6
+shapely>=2.0
