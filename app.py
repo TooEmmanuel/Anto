@@ -463,26 +463,26 @@ def build_county_summary(df: pd.DataFrame, beneficiaries_df: pd.DataFrame, measu
         ben_area = ben_area.rename(columns=lambda c: f"{c} Beneficiaries" if c != "County" else c)
 
         facility_norms = set(df["Facility Normalized"].dropna().tolist())
-       # matched_origin = (
-         #   beneficiaries_df[beneficiaries_df["Facility Origin Normalized"].isin(facility_norms)]
-        #    .groupby("County")["Beneficiary Name"]
-         #   .nunique()
-         #   .rename("Origin Matches")
-        #    .reset_index()
-       # )
-       # matched_redeploy = (
-       #     beneficiaries_df[beneficiaries_df["Facility Redeployment Normalized"].isin(facility_norms)]
-       #     .groupby("County")["Beneficiary Name"]
-         #   .nunique()
-        #   .rename("Redeployment Matches")
-        #    .reset_index()
-      #  )
+        matched_origin = (
+            beneficiaries_df[beneficiaries_df["Facility Origin Normalized"].isin(facility_norms)]
+            .groupby("County")["Beneficiary Name"]
+            .nunique()
+            .rename("Origin Matches")
+            .reset_index()
+        )
+        matched_redeploy = (
+            beneficiaries_df[beneficiaries_df["Facility Redeployment Normalized"].isin(facility_norms)]
+            .groupby("County")["Beneficiary Name"]
+            .nunique()
+           .rename("Redeployment Matches")
+            .reset_index()
+        )
 
         merged = merged.merge(ben_total, on="County", how="left")
         merged = merged.merge(ben_program, on="County", how="left")
         merged = merged.merge(ben_area, on="County", how="left")
-       # merged = merged.merge(matched_origin, on="County", how="left")
-        #merged = merged.merge(matched_redeploy, on="County", how="left")
+        merged = merged.merge(matched_origin, on="County", how="left")
+        merged = merged.merge(matched_redeploy, on="County", how="left")
     else:
         merged["Total Beneficiaries"] = 0
 
