@@ -463,13 +463,13 @@ def build_county_summary(df: pd.DataFrame, beneficiaries_df: pd.DataFrame, measu
         ben_area = ben_area.rename(columns=lambda c: f"{c} Beneficiaries" if c != "County" else c)
 
         facility_norms = set(df["Facility Normalized"].dropna().tolist())
-        matched_origin = (
-            beneficiaries_df[beneficiaries_df["Facility Origin Normalized"].isin(facility_norms)]
-            .groupby("County")["Beneficiary Name"]
-            .nunique()
-            .rename("Origin Matches")
-            .reset_index()
-        )
+       # matched_origin = (
+         #   beneficiaries_df[beneficiaries_df["Facility Origin Normalized"].isin(facility_norms)]
+        #    .groupby("County")["Beneficiary Name"]
+         #   .nunique()
+         #   .rename("Origin Matches")
+        #    .reset_index()
+       # )
        # matched_redeploy = (
        #     beneficiaries_df[beneficiaries_df["Facility Redeployment Normalized"].isin(facility_norms)]
        #     .groupby("County")["Beneficiary Name"]
@@ -750,18 +750,19 @@ def main():
     beneficiary_link_table = build_beneficiary_link_table(filtered_main, filtered_ben)
 
     if page == "Overview":
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3 = st.columns(4)
         c1.metric("Resource Rows", f"{len(filtered_main):,}")
         c2.metric("Counties", f"{filtered_main['County'].nunique():,}")
         c3.metric("Facilities", f"{filtered_main['Facility Display'].nunique():,}")
-        c4.metric(f"Total {measure}", f"{filtered_main[measure].sum():,.2f}")
+       
 
         if not filtered_ben.empty:
-            b1, b2, b3, b4 = st.columns(4)
+            b1, b2, b3 = st.columns(4)
             b1.metric("Beneficiaries", f"{filtered_ben['Beneficiary Name'].nunique():,}")
             b2.metric("Beneficiary Counties", f"{filtered_ben['County'].nunique():,}")
-            b3.metric("Origin Matches", f"{beneficiary_link_table['Origin_Facility_Matches'].sum():,}" if not beneficiary_link_table.empty else "0")
-            b4.metric("Redeployment Matches", f"{beneficiary_link_table['Redeployment_Facility_Matches'].sum():,}" if not beneficiary_link_table.empty else "0")
+            b3.metric(f"Total {measure}", f"{filtered_main[measure].sum():,.2f}")
+            #b3.metric("Origin Matches", f"{beneficiary_link_table['Origin_Facility_Matches'].sum():,}" if not beneficiary_link_table.empty else "0")
+           # b4.metric("Redeployment Matches", f"{beneficiary_link_table['Redeployment_Facility_Matches'].sum():,}" if not beneficiary_link_table.empty else "0")
 
         left, right = st.columns([1.2, 1])
         with left:
